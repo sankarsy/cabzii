@@ -1,77 +1,64 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { FaCarSide, FaUserShield } from "react-icons/fa";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaCarSide, FaUserShield, FaHeadset } from "react-icons/fa";
 import { MdAccessTime } from "react-icons/md";
 
 const skillsData = [
     {
         name: "Wide Vehicle Options",
-        icon: (
-            <FaCarSide className='text-5xl text-primary group-hover:text-black duration-300' />
-        ),
+        icon: <FaCarSide className="text-4xl text-yellow-500" />,
         link: "/",
-        description: "From economy cars to premium sedans and spacious SUVs, we offer a variety of vehicles to suit your travel needs. Whether it's a solo trip, family vacation, or business ride, we have the perfect car for you.",
-        aosDelay: '0',
+        description: "Economy to premium cars – perfect for solo trips, vacations, or business rides.",
     },
     {
         name: "Trusted Drivers",
-        icon: (
-            <FaUserShield className='text-5xl text-primary group-hover:text-black duration-300' />
-        ),
+        icon: <FaUserShield className="text-4xl text-yellow-500" />,
         link: "/",
-        description: "Our experienced and professional drivers ensure a safe, smooth, and punctual journey. Every driver is verified, well-trained, and committed to providing the best service.",
-        aosDelay: '500',
+        description: "Verified, professional, and courteous drivers for a safe and reliable journey.",
     },
     {
         name: "24/7 Service",
-        icon: (
-            <MdAccessTime className='text-5xl text-primary group-hover:text-black duration-300' />
-        ),
+        icon: <MdAccessTime className="text-4xl text-yellow-500" />,
         link: "/",
-        description: "We are available around the clock to provide seamless and hassle-free travel, ensuring you reach your destination anytime, anywhere.",
-        aosDelay: '1000',
+        description: "Available anytime, anywhere – for hassle-free travel, day or night.",
+    },
+    {
+        name: "Instant Support",
+        icon: <FaHeadset className="text-4xl text-yellow-500" />,
+        link: "/",
+        description: "Fast customer support to assist with bookings, cancellations, or queries.",
     }
-]
+];
 
 function Services() {
     return (
-        <>
-            <span id="about"></span>
-            <div className="dark:bg-black dark:text-white py-14 sm:min-h-[600px] sm:grid sm:place-items-center">
-                <div className="container">
-                    <div className="pb-12">
-                        <h1
-                            data-aos="fade-up"
-                            className="text-3xl font-semibold text-center sm:text-4xl font-serif"
-                        >
-                            Why Choose Us
-                        </h1>
-                    </div>
+        <div className="py-6 sm:py-8 bg-sky-50">
+            <div className="container mx-auto px-4">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-8 text-gray-800">
+                    Why Choose Us
+                </h2>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        {skillsData.map((skill, index) => (
-                            <div
-                                key={index}
-                                data-aos="fade-up"
-                                data-aos-delay={skill.aosDelay}
-                                className="card text-center group space-y-3 sm:space-y-6 p-4 sm:py-16 bg-gray-900 hover:bg-primary duration-300 text-white hover:text-black rounded-lg"
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    {skillsData.map((skill, index) => (
+                        <div
+                            key={index}
+                            className="bg-white text-gray-800 rounded-xl shadow-md hover:shadow-lg p-5 text-center transition duration-300"
+                        >
+                            <div className="mb-3 flex justify-center">{skill.icon}</div>
+                            <h3 className="text-base font-semibold mb-2">{skill.name}</h3>
+                            <p className="text-sm mb-3">{skill.description}</p>
+                            <Link
+                                to={skill.link}
+                                className="text-sm font-medium text-yellow-500 hover:text-teal-800 transition"
                             >
-                                <div className="grid place-items-center">{skill.icon}</div>
-                                <h1 className="text-2xl font-bold">{skill.name}</h1>
-                                <p>{skill.description}</p>
-                                <Link
-                                    to={skill.link}
-                                    className="inline-block text-lg font-semibold py-3 text-primary group-hover:text-black duration-300"
-                                >
-                                    Learn more
-                                </Link>
-                            </div>
-                        ))}
-                    </div>
+                                Learn more
+                            </Link>
+                        </div>
+                    ))}
                 </div>
             </div>
-        </>
-    )
+        </div>
+    );
 }
 
 export default Services;

@@ -1,76 +1,69 @@
 import React from "react";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import image1 from './Carouselasset/banner1.png';
+import image2 from './Carouselasset/banner2.png';
+import image3 from './Carouselasset/banner3.png';
 
-const carouselData = [
-  {
-    image: "https://via.placeholder.com/300", 
-    title: "FICCI Healthcare Startup Of The Year 2022",
-  },
-  {
-    image: "https://via.placeholder.com/300",
-    title: "BW Healthcare 40 Under 40 2023",
-  },
-  {
-    image: "https://via.placeholder.com/300",
-    title: "e4m Pride Of India 2024",
-  },
+const slides = [
+  { id: 1, image: image1 },
+  { id: 2, image: image2 },
+  { id: 3, image: image3 },
 ];
+
+const NextArrow = ({ onClick }) => (
+  <div
+    onClick={onClick}
+    className="absolute right-2 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-40 text-white text-3xl rounded-full p-1 hover:bg-opacity-70 transition cursor-pointer"
+  >
+    <BiChevronRight />
+  </div>
+);
+
+const PrevArrow = ({ onClick }) => (
+  <div
+    onClick={onClick}
+    className="absolute left-2 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-40 text-white text-3xl rounded-full p-1 hover:bg-opacity-70 transition cursor-pointer"
+  >
+    <BiChevronLeft />
+  </div>
+);
 
 const Carousel = () => {
   const settings = {
-    dots: true,
     infinite: true,
+    autoplay: true,
+    autoplaySpeed:4000,
     speed: 700,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
     arrows: true,
+    // dots: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    appendDots: dots => (
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
+        {dots}
+      </div>
+    ),
+    customPaging: () => (
+      <div className="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+    ),
   };
 
   return (
-    <div className="bg-gray-100 py-12">
-      <div className="container mx-auto px-4">
-        <div className="bg-white shadow-lg rounded-lg p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            {/* Left Section - Carousel */}
-            <div className="w-full lg:w-3/4 mx-auto">
-              <Slider {...settings}>
-                {carouselData.map((item, index) => (
-                  <div key={index} className="p-4">
-                    <div className="rounded-full overflow-hidden border-4 border-blue-500 w-64 h-64 mx-auto">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </Slider>
-            </div>
-
-            {/* Right Section - Text Content */}
-            <div className="text-left">
-              <h2 className="text-3xl font-bold text-teal-600">
-                More Than Just One Feather In Our Cap
-              </h2>
-              <ul className="mt-6 space-y-4 text-gray-700">
-                {carouselData.map((item, index) => (
-                  <li
-                    key={index}
-                    className="flex items-center gap-3 text-lg"
-                  >
-                    <span className="text-teal-500">✔️</span> {item.title}
-                  </li>
-                ))}
-              </ul>
-            </div>
+    <div className="px-4 pt-4">
+      <Slider {...settings}>
+        {slides.map(slide => (
+          <div key={slide.id} className="w-full h-full">
+            <img
+              src={slide.image}
+              alt={`Slide ${slide.id}`}
+              className="w-full h-full object-cover"
+            />
           </div>
-        </div>
-      </div>
+        ))}
+      </Slider>
     </div>
   );
 };

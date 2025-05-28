@@ -3,18 +3,20 @@ import {
   FaFacebook,
   FaInstagram,
   FaLinkedin,
+  FaTwitter,
   FaLocationArrow,
   FaMobileAlt,
   FaEnvelope,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const quickLinks = [
-    { title: "Home", link: "/#" },
-    { title: "About Us", link: "/#about" },
-    { title: "Our Services", link: "/#services" },
-    { title: "Contact Us", link: "/#contact" },
-    { title: "FAQ", link: "/#faq" },
+    { title: "Home", link: "/" },
+    { title: "About Us", link: "/about" },
+    { title: "Services", link: "/services" },
+    { title: "Contact", link: "/contact" },
+    { title: "FAQ", link: "/faq" },
   ];
 
   const services = [
@@ -25,37 +27,39 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="dark:bg-gray-900 bg-slate-100 dark:text-white py-8">
-      <div className="container mx-auto grid md:grid-cols-4 gap-6 px-6">
+    <footer className="bg-slate-800 text-white pt-12 pb-6">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Company Info */}
         <div>
-          <h2 className="text-2xl font-bold font-serif mb-3">Cabzii Travel Services</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-300">
-            Your trusted travel partner for safe and comfortable journeys. Explore
-            our fleet and enjoy hassle-free bookings with transparent pricing.
+          <h2 className="text-2xl font-bold mb-3 font-serif">Cabzii Travel Services</h2>
+          <p className="text-sm text-gray-300 leading-relaxed">
+            Your trusted partner for safe and comfortable journeys. Book your ride with ease and experience transparent pricing with our premium fleet.
           </p>
-          <div className="mt-4 space-y-2">
+          <div className="mt-4 space-y-2 text-sm text-gray-300">
             <div className="flex items-center gap-2">
-              <FaLocationArrow /> <p>Chennai, Tamil Nadu, India</p>
+              <FaLocationArrow /> <span>Chennai, Tamil Nadu, India</span>
             </div>
             <div className="flex items-center gap-2">
-              <FaMobileAlt /> <p>+91 8220870386</p>
+              <FaMobileAlt /> <span>+91 8220870386</span>
             </div>
             <div className="flex items-center gap-2">
-              <FaEnvelope /> <p>support@cabzii.in</p>
+              <FaEnvelope /> <span>support@cabzii.in</span>
             </div>
           </div>
         </div>
 
         {/* Quick Links */}
         <div>
-          <h2 className="text-xl font-bold mb-3">Quick Links</h2>
-          <ul className="space-y-2 text-gray-500 dark:text-gray-300">
-            {quickLinks.map((link, index) => (
+          <h2 className="text-xl font-semibold mb-3">Quick Links</h2>
+          <ul className="space-y-2 text-sm text-gray-300">
+            {quickLinks.map((item, index) => (
               <li key={index}>
-                <a href={link.link} className="hover:text-primary duration-300">
-                  {link.title}
-                </a>
+                <Link
+                  to={item.link}
+                  className="hover:text-yellow-400 transition duration-200"
+                >
+                  {item.title}
+                </Link>
               </li>
             ))}
           </ul>
@@ -63,10 +67,10 @@ const Footer = () => {
 
         {/* Services */}
         <div>
-          <h2 className="text-xl font-bold mb-3">Our Services</h2>
-          <ul className="space-y-2 text-gray-500 dark:text-gray-300">
+          <h2 className="text-xl font-semibold mb-3">Our Services</h2>
+          <ul className="space-y-2 text-sm text-gray-300">
             {services.map((service, index) => (
-              <li key={index} className="hover:text-primary duration-300 cursor-pointer">
+              <li key={index} className="hover:text-yellow-400 cursor-pointer transition duration-200">
                 {service}
               </li>
             ))}
@@ -75,24 +79,27 @@ const Footer = () => {
 
         {/* Social Media */}
         <div>
-          <h2 className="text-xl font-bold mb-3">Connect With Us</h2>
-          <div className="flex items-center gap-4">
-            <a href="#" className="text-2xl hover:text-primary duration-300">
+          <h2 className="text-xl font-semibold mb-3">Connect With Us</h2>
+          <div className="flex gap-4 text-xl">
+            <a href="#" className="hover:text-yellow-400 transition">
               <FaInstagram />
             </a>
-            <a href="#" className="text-2xl hover:text-primary duration-300">
+            <a href="#" className="hover:text-yellow-400 transition">
               <FaFacebook />
             </a>
-            <a href="#" className="text-2xl hover:text-primary duration-300">
+            <a href="#" className="hover:text-yellow-400 transition">
               <FaLinkedin />
+            </a>
+            <a href="#" className="hover:text-yellow-400 transition">
+              <FaTwitter />
             </a>
           </div>
         </div>
       </div>
 
       {/* Copyright */}
-      <div className="text-center text-gray-500 text-sm mt-6">
-        &copy; {new Date().getFullYear()} Cabzii Travel Services. All Rights Reserved.
+      <div className="mt-10 text-center text-sm text-gray-400 border-t border-slate-600 pt-4">
+        &copy; {new Date().getFullYear()} Cabzii Travel Services. All rights reserved.
       </div>
     </footer>
   );
