@@ -4,15 +4,38 @@ import {
   BiMenu,
   BiX,
   BiCar,
-  BiMap,
-  BiPhoneCall,
-  BiBook,
-  BiEnvelope,
+  BiMapAlt,
+  BiUserVoice,
+  BiBookBookmark,
+  BiCurrentLocation,
+  BiLogIn,
+  BiLogOut,
 } from "react-icons/bi";
 
 function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [location, setLocation] = useState("Detecting...");
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          );
+          const data = await res.json();
+          const city = data.address.city || data.address.town || data.address.village;
+          const postcode = data.address.postcode;
+          setLocation(`${city} ${postcode}`);
+        } catch {
+          setLocation("Location error");
+        }
+      },
+      () => setLocation("Permission denied")
+    );
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("loggedIn");
@@ -22,95 +45,130 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
   };
 
   const navLinks = [
-    { id: 1, name: "Cars", link: "/carlist1", icon: <BiCar /> },
-    { id: 2, name: "Tour Packages", link: "/tour-packages", icon: <BiMap /> },
-    { id: 3, name: "Call Drivers", link: "/call-drivers", icon: <BiPhoneCall /> },
-    { id: 4, name: "My Bookings", link: "/my-bookings", icon: <BiBook /> },
-    { id: 5, name: "Contact Us", link: "/contactus", icon: <BiEnvelope /> },
+    { id: 1, name: "Cabs", link: "/carlist", icon: <BiCar /> },
+    { id: 2, name: "Tour Package", link: "/tour-packages", icon: <BiMapAlt /> },
+    { id: 3, name: "Call Driver", link: "/call-drivers", icon: <BiUserVoice /> },
   ];
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768) setIsMenuOpen(false);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   return (
-    <nav className="bg-white dark:bg-gray-900 fixed w-full top-0 z-50 shadow">
-      <div className="container mx-auto px-4 max-w-screen-xl">
-        <div className="flex justify-between items-center py-4">
-          {/* Brand Logo - Home Button */}
-          <Link to="/" className="text-3xl font-bold text-yellow-500 font-serif">
+    <nav className="bg-gradient-to-r from-yellow-50 via-white to-green-50 fixed w-full z-50 shadow-sm border-b">
+      <div className="max-w-screen-xl mx-auto px-4 md:px-10 py-2 flex items-center justify-between text-sm md:text-base font-sans">
+        
+        {/* Left: Logo and Location */}
+        <div className="flex items-center gap-6">
+          <Link to="/" className="text-2xl font-bold text-yellow-500 font-serif">
             Cabzii.in
           </Link>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex flex-1 justify-end items-center gap-6">
-            {navLinks.map((item) => (
-              <Link
-                key={item.id}
-                to={item.link}
-                className="flex items-center gap-2 text-lg font-medium hover:text-yellow-500 transition-colors duration-300"
-              >
-                {item.icon}
-                {item.name}
-              </Link>
-            ))}
-            {isLoggedIn && (
-              <button
-                onClick={handleLogout}
-                className="text-red-500 font-medium hover:underline ml-4"
-              >
-                Logout
-              </button>
-            )}
+          <div className="flex items-center text-gray-700 gap-2">
+            <BiCurrentLocation className="text-lg text-green-600" />
+            <span className="font-medium text-sm md:text-base">
+               {location}
+            </span>
           </div>
+        </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center">
-            <BiMenu
-              onClick={() => setIsMenuOpen(true)}
-              className="text-3xl cursor-pointer text-yellow-500"
-            />
-          </div>
+        {/* Center: Search (Desktop only) */}
+        <div className="flex-1 hidden md:flex mx-6">
+          <input
+            type="text"
+            placeholder="Search cabs, packages, drivers..."
+            className="w-full rounded-full px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+
+        {/* Right: Nav Links + Actions */}
+        <div className="hidden md:flex items-center gap-6 text-gray-800">
+          {navLinks.map((item) => (
+            <Link
+              key={item.id}
+              to={item.link}
+              className="flex items-center gap-1 hover:text-yellow-500"
+            >
+              {item.icon}
+              {item.name}
+            </Link>
+          ))}
+
+          
+
+          {/* Login / Logout */}
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="text-red-500 flex items-center gap-1">
+              <BiLogOut />
+              Logout
+            </button>
+          ) : (
+            <Link to="/login" className="text-yellow-600 flex items-center gap-1">
+              <BiLogIn />
+              Login
+            </Link>
+          )}
+
+          {/* Booking Icon (last) */}
+          <Link to="/my-bookings" title="My Bookings" className="text-xl text-green-700">
+            <BiBookBookmark />
+          </Link>
+        </div>
+
+        {/* Mobile: Menu Icon */}
+        <div className="md:hidden">
+          <BiMenu onClick={() => setIsMenuOpen(true)} className="text-3xl text-green-700" />
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Drawer */}
       <div
-        className={`fixed top-0 right-0 w-64 h-full bg-white text-black shadow-lg transform ${
+        className={`fixed top-0 right-0 w-64 h-full bg-white shadow-lg transform ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out z-50 p-5`}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-yellow-500">Menu</h2>
+          <h2 className="text-2xl font-bold text-green-700">Menu</h2>
           <BiX onClick={() => setIsMenuOpen(false)} className="text-3xl cursor-pointer" />
         </div>
-        <ul className="flex flex-col items-start space-y-4">
+        <ul className="space-y-5">
           {navLinks.map((item) => (
             <li key={item.id}>
               <Link
                 to={item.link}
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center gap-2 text-lg font-medium hover:text-yellow-500"
+                className="flex items-center gap-2 text-lg hover:text-yellow-500"
               >
                 {item.icon}
                 {item.name}
               </Link>
             </li>
           ))}
-          {isLoggedIn && (
-            <li>
+          <li>
+            <Link
+              to="/my-bookings"
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center gap-2 text-lg text-green-600 hover:text-yellow-600"
+            >
+              <BiBookBookmark />
+              My Bookings
+            </Link>
+          </li>
+          <li>
+            {isLoggedIn ? (
               <button
                 onClick={handleLogout}
-                className="text-lg font-medium text-red-500 hover:underline"
+                className="flex items-center gap-2 text-lg text-red-500 hover:underline"
               >
+                <BiLogOut />
                 Logout
               </button>
-            </li>
-          )}
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-2 text-lg text-yellow-600 hover:underline"
+              >
+                <BiLogIn />
+                Login
+              </Link>
+            )}
+          </li>
         </ul>
       </div>
     </nav>

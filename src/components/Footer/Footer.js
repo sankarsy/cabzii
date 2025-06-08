@@ -4,6 +4,7 @@ import {
   FaInstagram,
   FaLinkedin,
   FaTwitter,
+  FaWhatsapp,
   FaLocationArrow,
   FaMobileAlt,
   FaEnvelope,
@@ -81,17 +82,20 @@ const Footer = () => {
         <div>
           <h2 className="text-xl font-semibold mb-3">Connect With Us</h2>
           <div className="flex gap-4 text-xl">
-            <a href="#" className="hover:text-yellow-400 transition">
+            <a href="#" className="text-pink-500 hover:scale-110 transition" title="Instagram">
               <FaInstagram />
             </a>
-            <a href="#" className="hover:text-yellow-400 transition">
+            <a href="#" className="text-blue-600 hover:scale-110 transition" title="Facebook">
               <FaFacebook />
             </a>
-            <a href="#" className="hover:text-yellow-400 transition">
+            <a href="#" className="text-blue-800 hover:scale-110 transition" title="LinkedIn">
               <FaLinkedin />
             </a>
-            <a href="#" className="hover:text-yellow-400 transition">
+            <a href="#" className="text-sky-400 hover:scale-110 transition" title="Twitter">
               <FaTwitter />
+            </a>
+            <a href="#" className="text-green-500 hover:scale-110 transition" title="WhatsApp">
+              <FaWhatsapp />
             </a>
           </div>
         </div>

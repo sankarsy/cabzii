@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import BookingPage from "./components/BookingPage/BookingPage";
 import About1 from "./components/About/About1";
-import CarList1 from "./components/CarList/CarList1";
+import CarList1 from "./components/CarList/AllCarsList";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Booking from "./components/Booking/Booking";
@@ -45,7 +45,7 @@ function App() {
           <Route path="/about1" element={<About1 />} />
           <Route path="/carlist" element={<CarList1 />} />
           <Route path="/booking/:id" element={<Booking />} />
-          <Route path="/travel-packages" element={<TravelPackageAll />} />
+          <Route path="/tour-packages" element={<TravelPackageAll />} />
           <Route path="/contactus" element={<ContactUs />} />
         </Routes>
       </div>

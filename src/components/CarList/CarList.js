@@ -7,6 +7,8 @@ const CarList = () => {
   const [carList, setCars] = useState([]);
   const scrollRef = useRef(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Fetch all cars
   const fetchCars = async () => {
@@ -16,11 +18,17 @@ const CarList = () => {
     } catch (err) {
       console.error("Error fetching cars:", err);
     }
+    finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchCars();
   }, []);
+
+  if (loading) return <div className="p-4 text-center">Loading packages...</div>;
+  if (error) return <div className="p-4 text-center text-red-600">Error: {error}</div>;
 
   // Scroll left or right by one card width + margin
   const scroll = (direction) => {
@@ -48,7 +56,7 @@ const CarList = () => {
     <div className="w-full mx-auto py-8 mt-4 px-4 bg-gray-100 relative overflow-hidden">
       {/* Header */}
       <div className="flex justify-between items-center px-2 mb-4">
-        <h2 className="text-xl font-bold text-gray-800">Choose Your</h2>
+        <h2 className="text-xl font-bold text-gray-800">Choose Your Car</h2>
         <button
           onClick={() => navigate("/carlist")}
           className="text-blue-600 hover:underline font-medium text-sm"

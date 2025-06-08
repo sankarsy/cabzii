@@ -1,5 +1,5 @@
-import Hero from "./Hero/Hero";
-import About from "./About/About";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import Services from "./Services/Services";
 import CarList from "./CarList/CarList";
 import Testimonial from "./Testimonial/Testimonial";
@@ -7,7 +7,7 @@ import Footer from "./Footer/Footer";
 import { FaWhatsapp } from "react-icons/fa"; // Import WhatsApp icon
 import Carousel from "./Carousel/Carousel";
 import TravelPackage from "./TravelPackage/TravelPackage";
-import Test from "./Test/Test";
+
 
 function Home() {
   // WhatsApp number and message
