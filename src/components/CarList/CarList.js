@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import axios from "axios";
+import API from "../../axios"; // Adjust the import path as necessary
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -13,7 +14,8 @@ const CarList = () => {
   // Fetch all cars
   const fetchCars = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/getAllCar");
+      // const res = await axios.get("http://localhost:8000/getAllCar");
+      const res = await API.get("/getAllCar");
       setCars(res.data);
     } catch (err) {
       console.error("Error fetching cars:", err);

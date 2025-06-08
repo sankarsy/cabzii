@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
+import API from "../../axios"; // Adjust the import path as necessar
 
 export default function TravelPackageAll() {
   const location = useLocation();
@@ -16,7 +17,8 @@ export default function TravelPackageAll() {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/getAllTravelPackages");
+        // const res = await axios.get("http://localhost:8000/getAllTravelPackages");
+        const res = await API.get("/getAllTravelPackages");
         setPackages(res.data);
       } catch (err) {
         console.error("Error fetching packages:", err);
