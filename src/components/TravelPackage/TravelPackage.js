@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
 import axios from "axios";
-import API from "../../axios"; // Adjust the import path as necessary
 import { useNavigate, Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -13,8 +12,8 @@ const TravelPackage = () => {
 
   const fetchPackages = async () => {
     try {
-      // const res = await axios.get("http://localhost:8000/getAllTravelPackages");
-      const res = await API.get("/getAllTravelPackages");
+      const res = await axios.get("https://api.cabzii.in/api/getAllTravelPackages");
+      console.log("Full API Response:", res.data); // <-- ADD THIS LINE
       setPackages(res.data);
     } catch (err) {
       console.error("Error fetching packages:", err);
@@ -24,9 +23,12 @@ const TravelPackage = () => {
     }
   };
 
+
   useEffect(() => {
     fetchPackages();
   }, []);
+
+  console.log(packages)
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -96,7 +98,8 @@ const TravelPackage = () => {
                   <img
                     // src={`http://localhost:8000/uploads/${item.image}`}
                     // alt={item.name || item.seoTitle}
-                    src={`${process.env.REACT_APP_API_URL}/uploads/${item.image}`}
+                    // src={`${process.env.REACT_APP_API_URL}/uploads/${item.image}`}
+                    src={`https://api.cabzii.in/uploads/${item.image}`}
                     alt={item.name || item.seoTitle}
                     className="w-full h-full object-cover"
                   />

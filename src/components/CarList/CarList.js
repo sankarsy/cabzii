@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
 import axios from "axios";
-import API from "../../axios"; // Adjust the import path as necessary
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -14,16 +13,16 @@ const CarList = () => {
   // Fetch all cars
   const fetchCars = async () => {
     try {
-      // const res = await axios.get("http://localhost:8000/getAllCar");
-      const res = await API.get("/getAllCar");
+      const res = await axios.get("https://api.cabzii.in/api/getAllCar");
       setCars(res.data);
     } catch (err) {
       console.error("Error fetching cars:", err);
-    }
-    finally {
+      setError("Failed to load car data");
+    } finally {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchCars();
@@ -105,7 +104,8 @@ const CarList = () => {
                 {/* Car Image */}
                 <div className="w-full h-40 overflow-hidden rounded-t-lg bg-gray-100 flex items-center justify-center">
                   <img
-                    src={`http://localhost:8000${car.carimage}`}
+                    // src={`http://localhost:8000${car.carimage}`}
+                    src={`https://api.cabzii.in${car.carimage}`}
                     alt={car.carname}
                     className="w-full h-full object-contain"
                   />

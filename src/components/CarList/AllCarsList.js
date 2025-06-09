@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import API from "../../axios"; // Adjust the import path as necessary
 import { useNavigate } from "react-router-dom";
 
 const AllCarsList = () => {
@@ -9,8 +8,7 @@ const AllCarsList = () => {
 
   const fetchCars = async () => {
     try {
-      // const res = await axios.get("http://localhost:8000/getAllCar");
-      const res = await API.get("/getAllCar");
+      const res = await axios.get("https://api.cabzii.in/api/getAllCar");
       setCars(res.data);
     } catch (err) {
       console.error("Error fetching cars:", err);
@@ -44,7 +42,7 @@ const AllCarsList = () => {
                 <img
                   // src={`http://localhost:8000${car.carimage}`}
                   // alt={car.carname}
-                  src={`${process.env.REACT_APP_API_URL}${car.carimage}`}
+                  src={`https://api.cabzii.in${car.carimage}`}
                   alt={car.carname}
                   className="w-full h-full object-contain"
                 />
