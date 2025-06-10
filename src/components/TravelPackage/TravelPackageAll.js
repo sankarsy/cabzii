@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
+import API, { BASE_API_URL } from "../../api/baseURL";
 
 
 export default function TravelPackageAll() {
@@ -17,8 +18,7 @@ export default function TravelPackageAll() {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const res = await axios.get("https://api.cabzii.in/api/getAllTravelPackages");
-        // console.log("Full API Response:", res.data); // <-- ADD THIS LINE
+        const res = await API.get("/getAllTravelPackages");
         setPackages(res.data);
       } catch (err) {
         console.error("Error fetching packages:", err);
