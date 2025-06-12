@@ -52,7 +52,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="px-4 pt-2">
+    <div className="px-4 pb-4 mt-4 bg-white relative">
       <Slider {...settings}>
         {slides.map(slide => (
           <div key={slide.id} className="w-full h-full">

@@ -1,30 +1,77 @@
-import { useRef, useEffect, useState } from "react";
-import API from "../../api/baseURL";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const CarList = () => {
-  const [carList, setCars] = useState([]);
-  const scrollRef = useRef(null);
+const Driver = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const scrollRef = useRef(null);
 
-  const fetchCars = async () => {
-    try {
-      const res = await API.get("/getAllCar");
-      setCars(res.data);
-    } catch (err) {
-      console.error("Error fetching cars:", err);
-      setError("Failed to load car data");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCars();
-  }, []);
+  const driverPackages = [
+    {
+      id: "1",
+      type: "Hatchback",
+      image: "/images/hatchback.png",
+      kmPerHour: 15,
+      mrp: 1000,
+      offer: 800,
+    },
+    {
+      id: "2",
+      type: "Sedan",
+      image: "/images/sedan.png",
+      kmPerHour: 18,
+      mrp: 1500,
+      offer: 1100,
+    },
+    {
+      id: "3",
+      type: "SUV",
+      image: "/images/suv.png",
+      kmPerHour: 20,
+      mrp: 1800,
+      offer: 1300,
+    },
+    {
+      id: "4",
+      type: "MPV",
+      image: "/images/mpv.png",
+      kmPerHour: 16,
+      mrp: 2000,
+      offer: 1600,
+    },
+    {
+      id: "5",
+      type: "Van",
+      image: "/images/van.png",
+      kmPerHour: 14,
+      mrp: 2200,
+      offer: 1700,
+    },
+    {
+      id: "6",
+      type: "Traveller",
+      image: "/images/traveller.png",
+      kmPerHour: 12,
+      mrp: 2500,
+      offer: 2000,
+    },
+    {
+      id: "7",
+      type: "Mini Bus",
+      image: "/images/minibus.png",
+      kmPerHour: 10,
+      mrp: 2800,
+      offer: 2100,
+    },
+    {
+      id: "8",
+      type: "AC Couch",
+      image: "/images/couch.png",
+      kmPerHour: 9,
+      mrp: 3000,
+      offer: 2400,
+    },
+  ];
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -42,20 +89,17 @@ const CarList = () => {
     }
   };
 
-  const handleBook = (carId, type) => {
-    navigate(`/booking?carId=${carId}&carType=${type}`);
+  const handleViewDrivers = (type) => {
+    navigate(`/drivers?type=${type}`);
   };
 
-  if (loading) return <div className="p-4 text-center">Loading cars...</div>;
-  if (error) return <div className="p-4 text-center text-red-600">Error: {error}</div>;
-
   return (
-    <div className="w-full mt-4 mx-auto py-8 px-4 bg-white relative overflow-hidden">
+    <div className="w-full mx-auto py-8 px-4 bg-white mt-4 relative overflow-hidden">
       {/* Header */}
       <div className="flex justify-between items-center px-2 mb-4">
-        <h2 className="text-xl font-bold text-gray-800">Book Your Car</h2>
+        <h2 className="text-xl font-bold text-gray-800">Driver Categories</h2>
         <button
-          onClick={() => navigate("/carlist")}
+          onClick={() => navigate("/all-drivers")}
           className="text-blue-600 hover:underline font-medium text-sm"
         >
           View All →
@@ -76,7 +120,7 @@ const CarList = () => {
         <ChevronRight size={20} />
       </button>
 
-      {/* Car List */}
+      {/* Category List */}
       <div
         ref={scrollRef}
         className="overflow-x-auto scroll-smooth"
@@ -86,44 +130,44 @@ const CarList = () => {
         }}
       >
         <div className="flex gap-4">
-          {carList.map((car) => {
-            const mrp = parseFloat(car.price) || 0;
-            const offer = parseFloat(car.offerprice) || 0;
+          {driverPackages.map((pkg) => {
             const discount =
-              mrp > 0 && offer > 0 ? Math.round(((mrp - offer) / mrp) * 100) : 0;
+              pkg.mrp > 0 && pkg.offer > 0
+                ? Math.round(((pkg.mrp - pkg.offer) / pkg.mrp) * 100)
+                : 0;
 
             return (
               <div
-                key={car._id}
+                key={pkg.id}
                 className="card-item flex-shrink-0 w-[calc(100%/2-1rem)] md:w-[calc(100%/5-1rem)] bg-white shadow rounded"
               >
                 <figure className="h-40 bg-gray-100 overflow-hidden">
                   <img
-                    src={`https://api.cabzii.in${car.carimage}`}
-                    alt={car.carname}
+                    src={pkg.image}
+                    alt={pkg.type}
                     className="w-full h-full object-contain"
                   />
                 </figure>
                 <div className="p-4">
                   <h2 className="text-base font-bold text-gray-800 flex justify-between items-center">
-                    {car.carname}
+                    {pkg.type}
                     {discount > 0 && (
                       <span className="bg-green-100 text-green-600 text-xs px-2 py-0.5 rounded">
                         {discount}% OFF
                       </span>
                     )}
                   </h2>
-                  <p className="text-sm text-gray-600">{car.distance} Km</p>
+                  <p className="text-sm text-gray-600">{pkg.kmPerHour} KM / Hr</p>
                   <div className="flex items-center gap-2 text-sm mt-1">
-                    <span className="line-through text-gray-400">₹{mrp}</span>
-                    <span className="text-green-600 font-semibold">₹{offer}</span>
+                    <span className="line-through text-gray-400">₹{pkg.mrp}</span>
+                    <span className="text-green-600 font-semibold">₹{pkg.offer}</span>
                   </div>
                   <div className="flex justify-between items-center mt-3">
                     <button
-                      onClick={() => handleBook(car.carid, car.carname)}
+                      onClick={() => handleViewDrivers(pkg.type)}
                       className="bg-yellow-500 text-white px-3 py-1 text-xs rounded hover:bg-yellow-600 transition"
                     >
-                      Book Now
+                      View Drivers
                     </button>
                     <span className="text-xs border border-gray-300 px-2 py-0.5 rounded">Cabzii</span>
                   </div>
@@ -137,4 +181,4 @@ const CarList = () => {
   );
 };
 
-export default CarList;
+export default Driver;

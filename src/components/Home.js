@@ -7,6 +7,7 @@ import Footer from "./Footer/Footer";
 import { FaWhatsapp } from "react-icons/fa"; // Import WhatsApp icon
 import Carousel from "./Carousel/Carousel";
 import TravelPackage from "./TravelPackage/TravelPackage";
+import Driver from "./Driver/Driver";
 
 
 function Home() {
@@ -20,6 +21,7 @@ function Home() {
       <Carousel />
       <TravelPackage />
       <CarList />
+      <Driver />
       <Services />
       <Testimonial />
       <Footer />

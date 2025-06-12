@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -43,7 +43,7 @@ const testimonialData = [
 ];
 
 const Testimonial = () => {
-  const sliderRef = React.useRef(null);
+  const sliderRef = useRef(null);
   const [expanded, setExpanded] = useState({});
 
   const toggleExpand = (index) => {
@@ -60,43 +60,30 @@ const Testimonial = () => {
     autoplaySpeed: 3500,
     arrows: false,
     responsive: [
-      {
-        breakpoint: 1280,
-        settings: { slidesToShow: 3 },
-      },
-      {
-        breakpoint: 768,
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 480,
-        settings: { slidesToShow: 1 },
-      },
+      { breakpoint: 1280, settings: { slidesToShow: 3 } },
+      { breakpoint: 768, settings: { slidesToShow: 2 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
   };
 
   const renderStars = (rating) => {
-    let stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        i <= rating ? (
-          <FaStar key={i} className="text-yellow-400 inline-block" />
-        ) : (
-          <FaRegStar key={i} className="text-yellow-400 inline-block" />
-        )
-      );
-    }
-    return stars;
+    return Array.from({ length: 5 }, (_, i) =>
+      i < rating ? (
+        <FaStar key={i} className="text-yellow-400 text-sm" />
+      ) : (
+        <FaRegStar key={i} className="text-yellow-400 text-sm" />
+      )
+    );
   };
 
   return (
-    <div className="bg-slate-50 dark:bg-gray-900 dark:text-white py-12 sm:py-20">
+    <div className="bg-white py-10 mt-4">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="space-y-4 mb-10 text-center">
-          <p className="text-xl sm:text-2xl font-bold font-serif">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
             Real Experiences from Our Clients
-          </p>
-          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-300 max-w-2xl mx-auto">
+          </h2>
+          <p className="text-sm text-gray-500 max-w-2xl mx-auto">
             Hear what our satisfied customers have to say about their journeys with Cabzii.
           </p>
         </div>
@@ -105,54 +92,47 @@ const Testimonial = () => {
           <Slider ref={sliderRef} {...settings}>
             {testimonialData.map((client, index) => (
               <div key={index} className="px-2">
-                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow hover:shadow-lg transition-transform transform hover:-translate-y-1 h-[240px] flex flex-col justify-between">
-                  <div className="flex flex-col items-center text-center space-y-2">
-                    {/* Image on top */}
+                <div className="bg-white rounded-xl border shadow-sm hover:shadow-md transition p-5 h-[260px] flex flex-col justify-between text-center card-item">
+                  <div className="flex flex-col items-center gap-2">
                     <img
                       src={client.image}
                       alt={client.name}
                       className="rounded-full w-14 h-14 object-cover border-2 border-yellow-400"
                     />
-                    {/* Name below image */}
-                    <h3 className="text-sm font-semibold">{client.name}</h3>
-
-                    {/* Star Ratings */}
-                    <div className="text-yellow-400 text-base">{renderStars(client.rating)}</div>
-
-                    {/* Description */}
-                    <p
-                      className={`text-xs sm:text-sm text-gray-600 dark:text-gray-300 italic ${
-                        expanded[index] ? "" : "line-clamp-4"
-                      }`}
-                      style={{ whiteSpace: "pre-line" }}
-                    >
-                      {client.description}
-                    </p>
-
-                    {client.description.split(" ").length > 20 && (
-                      <button
-                        className="text-yellow-400 text-xs font-semibold underline mt-1"
-                        onClick={() => toggleExpand(index)}
-                      >
-                        {expanded[index] ? "Show less" : "Show more"}
-                      </button>
-                    )}
+                    <h3 className="text-sm font-bold text-gray-800">{client.name}</h3>
+                    <div className="flex justify-center gap-1">{renderStars(client.rating)}</div>
                   </div>
+
+                  <p
+                    className={`text-xs text-gray-600 mt-3 italic ${
+                      expanded[index] ? "" : "line-clamp-4"
+                    }`}
+                  >
+                    {client.description}
+                  </p>
+
+                  {client.description.split(" ").length > 20 && (
+                    <button
+                      className="text-yellow-500 text-xs font-semibold underline mt-1"
+                      onClick={() => toggleExpand(index)}
+                    >
+                      {expanded[index] ? "Show less" : "Show more"}
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
           </Slider>
 
-          {/* Navigation Buttons */}
+          {/* Navigation Arrows */}
           <button
-            className="absolute top-1/2 -translate-y-1/2 left-2 xl:left-4 bg-slate-700 text-white p-2 rounded-full shadow hover:bg-slate-600 transition"
+            className="absolute top-1/2 -translate-y-1/2 left-2 xl:left-4 bg-white text-gray-700 p-2 rounded-full shadow hover:bg-gray-100 transition"
             onClick={() => sliderRef.current.slickPrev()}
           >
             <FaChevronLeft size={18} />
           </button>
-
           <button
-            className="absolute top-1/2 -translate-y-1/2 right-2 xl:right-4 bg-slate-700 text-white p-2 rounded-full shadow hover:bg-slate-600 transition"
+            className="absolute top-1/2 -translate-y-1/2 right-2 xl:right-4 bg-white text-gray-700 p-2 rounded-full shadow hover:bg-gray-100 transition"
             onClick={() => sliderRef.current.slickNext()}
           >
             <FaChevronRight size={18} />

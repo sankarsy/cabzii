@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import axios from "axios";
-import API, { BASE_API_URL } from "../../api/baseURL";
+import API from "../../api/baseURL";
 import { useNavigate, Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -14,7 +13,6 @@ const TravelPackage = () => {
   const fetchPackages = async () => {
     try {
       const res = await API.get("/getAllTravelPackages");
-      console.log("Full API Response:", res.data); // <-- ADD THIS LINE
       setPackages(res.data);
     } catch (err) {
       console.error("Error fetching packages:", err);
@@ -24,12 +22,9 @@ const TravelPackage = () => {
     }
   };
 
-
   useEffect(() => {
     fetchPackages();
   }, []);
-
-  console.log(packages)
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -51,7 +46,7 @@ const TravelPackage = () => {
   if (error) return <div className="p-4 text-center text-red-600">Error: {error}</div>;
 
   return (
-    <div className="w-full mx-auto py-8 mt-4 px-4 bg-gray-100 relative overflow-hidden">
+    <div className="w-full mx-auto py-8 px-4 mt-4 bg-white relative overflow-hidden">
       {/* Header */}
       <div className="flex justify-between items-center px-2 mb-4">
         <h2 className="text-xl font-bold text-gray-800">Explore Travel Packages</h2>
@@ -77,41 +72,56 @@ const TravelPackage = () => {
         <ChevronRight size={20} />
       </button>
 
-      {/* Package List */}
+      {/* Cards */}
       <div
         ref={scrollRef}
         className="overflow-x-auto scroll-smooth"
-        style={{
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-        }}
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        <div className="flex gap-7">
+        <div className="flex gap-4">
           {packages.map((item) => (
             <Link
               to={`/tour-packages?category=${encodeURIComponent(item.category)}`}
               key={item._id}
-              className="card-item flex-shrink-0 w-[48%] sm:w-[48%] md:w-[30%] lg:w-[18%] bg-white shadow hover:shadow-md transition duration-300 rounded-lg overflow-hidden"
               title={item.seoTitle || item.name}
+              className="card-item flex-shrink-0 w-[calc(100%/2-1rem)] md:w-[calc(100%/5-1rem)] bg-white shadow rounded overflow-hidden flex flex-col h-[300px]"
             >
-              <div className="w-full h-36 overflow-hidden rounded-t-lg bg-gray-200 flex items-center justify-center">
+              <figure className="h-40 bg-gray-100 overflow-hidden flex items-center justify-center">
                 {item.image ? (
                   <img
-                    src={`${BASE_API_URL}/uploads/${item.image}`}
-                    alt={item.name || item.seoTitle}
+                    src={`https://api.cabzii.in/uploads/${item.image}`}
+                    alt={item.name}
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-gray-500 text-sm">No Image</span>
+                  <div className="flex items-center justify-center h-full text-gray-500 text-sm">
+                    No Image
+                  </div>
                 )}
-              </div>
-              <div className="text-center bg-blue-100 p-3 rounded-b-lg">
-                <p className="text-sm font-semibold text-gray-800 capitalize truncate">
-                  {item.name}
-                </p>
-                {item.seoTitle && (
-                  <p className="text-xs text-gray-500 italic">{item.seoTitle}</p>
-                )}
+              </figure>
+
+              <div className="p-4 flex flex-col justify-between flex-1">
+                <div>
+                  <h2 className="text-base font-bold text-gray-800 mb-1 line-clamp-1">
+                    {item.name}
+                  </h2>
+                  {item.seoTitle && (
+                    <p className="bg-indigo-100 text-indigo-600 text-xs px-2 py-0.5 rounded w-fit mb-1 line-clamp-1">
+                      {item.seoTitle}
+                    </p>
+                  )}
+                  <p className="text-sm text-gray-600 line-clamp-2">
+                    Explore the best {item.category?.toLowerCase() || "travel"} packages now.
+                  </p>
+                </div>
+                <div className="flex justify-between items-center mt-3">
+                  <button className="bg-yellow-500 text-white px-3 py-1 text-xs rounded hover:bg-yellow-600 transition">
+                    View
+                  </button>
+                  <span className="text-xs border border-gray-300 px-2 py-0.5 rounded">
+                    {item.category}
+                  </span>
+                </div>
               </div>
             </Link>
           ))}

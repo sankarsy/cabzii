@@ -10,6 +10,8 @@ import "aos/dist/aos.css";
 import Booking from "./components/Booking/Booking";
 import ContactUs from "./components/ContactUs/ContactUs";
 import TravelPackageAll from "./components/TravelPackage/TravelPackageAll";
+import Driver from "./components/Driver/Driver";
+import DriverAll from "./components/Driver/DriverAll";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,13 +33,13 @@ function App() {
   }, []);
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden bg-gray-200">
       <Navbar
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
       />
 
-      <div className="pt-16"> {/* Add padding-top equal to navbar height */}
+      <div className="pt-12 md:pt-14">{/* Add padding-top equal to navbar height */}
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
@@ -47,6 +49,8 @@ function App() {
           <Route path="/booking/:id" element={<Booking />} />
           <Route path="/tour-packages" element={<TravelPackageAll />} />
           <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/drivers" element={<Driver />} />
+          <Route path="/all-drivers" element={<DriverAll />} />
         </Routes>
       </div>
     </div>
