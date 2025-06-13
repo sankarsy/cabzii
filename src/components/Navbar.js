@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   BiMenu,
@@ -7,7 +7,6 @@ import {
   BiMapAlt,
   BiUserVoice,
   BiBookBookmark,
-  BiCurrentLocation,
   BiLogIn,
   BiLogOut,
 } from "react-icons/bi";
@@ -15,27 +14,6 @@ import {
 function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [location, setLocation] = useState("Detecting...");
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const { latitude, longitude } = pos.coords;
-        try {
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-          );
-          const data = await res.json();
-          const city = data.address.city || data.address.town || data.address.village;
-          const postcode = data.address.postcode;
-          setLocation(`${city} ${postcode}`);
-        } catch {
-          setLocation("Location error");
-        }
-      },
-      () => setLocation("Permission denied")
-    );
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("loggedIn");
@@ -51,77 +29,78 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
   ];
 
   return (
-    <nav className="bg-white fixed w-full z-50 shadow-md border-b border-gray-200">
+    <nav className="bg-white fixed w-full z-50 shadow-sm border-b border-gray-200">
       <div className="max-w-screen-xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
-        {/* Left: Logo and Location */}
+        {/* Logo */}
         <div className="flex items-center gap-4">
-          <Link to="/" onClick={() => window.scrollTo(0, 0)} className="text-xl md:text-2xl font-bold text-gray-800 font-serif">
+          <Link
+            to="/"
+            onClick={() => window.scrollTo(0, 0)}
+            className="text-2xl font-semibold text-gray-800 font-serif"
+          >
             Cabzii.in
           </Link>
-          <div className="hidden sm:flex items-center text-gray-600 gap-1 text-sm">
-            <BiCurrentLocation className="text-base" />
-            <span>{location}</span>
-          </div>
         </div>
 
-        {/* Center: Search (Desktop only) */}
-        <div className="hidden md:flex flex-1 justify-center px-6">
+        {/* Search bar (Desktop only) */}
+        <div className="hidden md:flex flex-1 justify-center px-4">
           <input
             type="text"
-            placeholder="Search cabs, packages, drivers..."
-            className="w-full max-w-md px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            placeholder="Search cars, tours, drivers..."
+            className="w-full max-w-md px-4 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500"
           />
         </div>
 
-        {/* Right: Nav & Actions (Desktop) */}
-        <div className="hidden md:flex items-center gap-5 text-gray-700">
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center gap-6 text-sm text-gray-700">
           {navLinks.map((item) => (
-            <Link key={item.id} to={item.link} className="flex items-center gap-1 hover:text-yellow-500">
+            <Link key={item.id} to={item.link} className="flex items-center gap-1">
               {item.icon}
               {item.name}
             </Link>
           ))}
 
+          <Link to="/my-bookings" className="flex items-center gap-1">
+            <BiBookBookmark />
+            My Bookings
+          </Link>
+
           {isLoggedIn ? (
-            <button onClick={handleLogout} className="flex items-center gap-1 hover:text-red-500">
+            <button onClick={handleLogout} className="flex items-center gap-1">
               <BiLogOut />
               Logout
             </button>
           ) : (
-            <Link to="/login" className="flex items-center gap-1 hover:text-yellow-600">
+            <Link to="/login" className="flex items-center gap-1">
               <BiLogIn />
               Login
             </Link>
           )}
-
-          <Link to="/my-bookings" title="My Bookings" className="text-xl hover:text-green-600">
-            <BiBookBookmark />
-          </Link>
         </div>
 
-        {/* Mobile: Menu Icon */}
+        {/* Mobile menu button */}
         <div className="md:hidden">
-          <BiMenu onClick={() => setIsMenuOpen(true)} className="text-3xl text-gray-700" />
+          <BiMenu onClick={() => setIsMenuOpen(true)} className="text-3xl text-gray-800" />
         </div>
       </div>
 
       {/* Mobile Drawer */}
       <div
-        className={`fixed top-0 right-0 w-64 h-full bg-white shadow-lg transform ${
+        className={`fixed top-0 right-0 w-64 h-full bg-white shadow-md transform ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out z-50 p-5`}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-800">Menu</h2>
+          <h2 className="text-lg font-semibold text-gray-800">Menu</h2>
           <BiX onClick={() => setIsMenuOpen(false)} className="text-3xl cursor-pointer" />
         </div>
-        <ul className="space-y-4">
+        <ul className="space-y-4 text-gray-700">
           {navLinks.map((item) => (
             <li key={item.id}>
               <Link
                 to={item.link}
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center gap-2 text-gray-700 hover:text-yellow-500"
+                className="flex items-center gap-2"
               >
                 {item.icon}
                 {item.name}
@@ -132,7 +111,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
             <Link
               to="/my-bookings"
               onClick={() => setIsMenuOpen(false)}
-              className="flex items-center gap-2 text-gray-700 hover:text-green-600"
+              className="flex items-center gap-2"
             >
               <BiBookBookmark />
               My Bookings
@@ -141,8 +120,11 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
           <li>
             {isLoggedIn ? (
               <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 text-gray-700 hover:text-red-500"
+                onClick={() => {
+                  handleLogout();
+                  setIsMenuOpen(false);
+                }}
+                className="flex items-center gap-2"
               >
                 <BiLogOut />
                 Logout
@@ -151,7 +133,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
               <Link
                 to="/login"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center gap-2 text-gray-700 hover:text-yellow-600"
+                className="flex items-center gap-2"
               >
                 <BiLogIn />
                 Login
