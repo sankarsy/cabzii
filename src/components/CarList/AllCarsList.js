@@ -18,8 +18,14 @@ const AllCarsList = () => {
     fetchCars();
   }, []);
 
-  const handleBook = (carId, type) => {
-    navigate(`/booking?carId=${carId}&carType=${type}`);
+  // ✅ Updated to pass full data via state
+  const handleBook = (car) => {
+    navigate(`/booking/${car._id}`, {
+      state: {
+        data: car,
+        type: "cab",
+      },
+    });
   };
 
   return (
@@ -62,7 +68,7 @@ const AllCarsList = () => {
                 </div>
                 <div className="flex justify-between items-center mt-3">
                   <button
-                    onClick={() => handleBook(car.carid, car.carname)}
+                    onClick={() => handleBook(car)}
                     className="bg-yellow-500 text-white px-3 py-1 text-xs rounded hover:bg-yellow-600 transition"
                   >
                     Book Now

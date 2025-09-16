@@ -40,6 +40,13 @@ const testimonialData = [
       "Reliable and safe travel. Would definitely book again. The app made it super easy to find rides quickly and the prices were fair.",
     rating: 5,
   },
+  {
+    name: "Kiran Joshi",
+    image: "https://picsum.photos/206",
+    description:
+      "Cabzii exceeded my expectations. Affordable, reliable, and punctual service. I will definitely use them again for my future travels.",
+    rating: 4,
+  },
 ];
 
 const Testimonial = () => {
@@ -54,13 +61,22 @@ const Testimonial = () => {
     dots: true,
     infinite: true,
     speed: 600,
-    slidesToShow: 4,
+    slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3500,
     arrows: false,
+    appendDots: (dots) => (
+      <div style={{ bottom: "-30px" }}>
+        <ul className="flex justify-center gap-3">{dots}</ul>
+      </div>
+    ),
+    customPaging: () => (
+      <div className="w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-500 transition-all"></div>
+    ),
     responsive: [
-      { breakpoint: 1280, settings: { slidesToShow: 3 } },
+      { breakpoint: 1280, settings: { slidesToShow: 4 } },
+      { breakpoint: 1024, settings: { slidesToShow: 3 } },
       { breakpoint: 768, settings: { slidesToShow: 2 } },
       { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
@@ -77,13 +93,14 @@ const Testimonial = () => {
   };
 
   return (
-    <div className="bg-white py-10 mt-4">
+    <div className="bg-white py-14 mt-4">
       <div className="max-w-7xl mx-auto px-4">
+        {/* Heading */}
         <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+          <h2 className="text-3xl font-bold mb-2 text-gray-900">
             Real Experiences from Our Clients
           </h2>
-          <p className="text-sm text-gray-500 max-w-2xl mx-auto">
+          <p className="text-gray-600 text-sm max-w-2xl mx-auto">
             Hear what our satisfied customers have to say about their journeys with Cabzii.
           </p>
         </div>
@@ -91,20 +108,20 @@ const Testimonial = () => {
         <div className="relative">
           <Slider ref={sliderRef} {...settings}>
             {testimonialData.map((client, index) => (
-              <div key={index} className="px-2">
-                <div className="bg-white rounded-xl border shadow-sm hover:shadow-md transition p-5 h-[260px] flex flex-col justify-between text-center card-item">
+              <div key={index} className="px-3">
+                <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all p-5 h-[280px] flex flex-col justify-between text-center border border-gray-200 hover:border-gray-400">
                   <div className="flex flex-col items-center gap-2">
                     <img
                       src={client.image}
                       alt={client.name}
-                      className="rounded-full w-14 h-14 object-cover border-2 border-yellow-400"
+                      className="rounded-full w-16 h-16 object-cover border-4 border-gray-300"
                     />
-                    <h3 className="text-sm font-bold text-gray-800">{client.name}</h3>
+                    <h3 className="text-base font-bold text-gray-800">{client.name}</h3>
                     <div className="flex justify-center gap-1">{renderStars(client.rating)}</div>
                   </div>
 
                   <p
-                    className={`text-xs text-gray-600 mt-3 italic ${
+                    className={`text-xs text-gray-700 mt-3 italic ${
                       expanded[index] ? "" : "line-clamp-4"
                     }`}
                   >
@@ -113,7 +130,7 @@ const Testimonial = () => {
 
                   {client.description.split(" ").length > 20 && (
                     <button
-                      className="text-yellow-500 text-xs font-semibold underline mt-1"
+                      className="text-gray-600 text-xs font-semibold underline mt-1 hover:text-gray-800 transition"
                       onClick={() => toggleExpand(index)}
                     >
                       {expanded[index] ? "Show less" : "Show more"}
@@ -124,22 +141,29 @@ const Testimonial = () => {
             ))}
           </Slider>
 
-          {/* Navigation Arrows */}
+          {/* White Glowing Navigation Arrows */}
           <button
-            className="absolute top-1/2 -translate-y-1/2 left-2 xl:left-4 bg-white text-gray-700 p-2 rounded-full shadow hover:bg-gray-100 transition"
+            className="absolute top-1/2 -translate-y-1/2 left-0 p-3 rounded-full cursor-pointer
+                       bg-transparent border border-white/20 hover:border-white/40
+                       shadow-[0_0_10px_4px_rgba(255,255,255,0.2)] hover:shadow-[0_0_15px_6px_rgba(255,255,255,0.4)]
+                       transition-all"
             onClick={() => sliderRef.current.slickPrev()}
           >
-            <FaChevronLeft size={18} />
+            <FaChevronLeft className="text-block text-xl" />
           </button>
           <button
-            className="absolute top-1/2 -translate-y-1/2 right-2 xl:right-4 bg-white text-gray-700 p-2 rounded-full shadow hover:bg-gray-100 transition"
+            className="absolute top-1/2 -translate-y-1/2 right-0 p-3 rounded-full cursor-pointer
+                       bg-transparent border border-white/20 hover:border-white/40
+                       shadow-[0_0_10px_4px_rgba(255,255,255,0.2)] hover:shadow-[0_0_15px_6px_rgba(255,255,255,0.4)]
+                       transition-all"
             onClick={() => sliderRef.current.slickNext()}
           >
-            <FaChevronRight size={18} />
+            <FaChevronRight className="text-block text-xl" />
           </button>
         </div>
       </div>
 
+      {/* Line Clamp CSS */}
       <style>{`
         .line-clamp-4 {
           display: -webkit-box;

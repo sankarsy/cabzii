@@ -105,22 +105,16 @@ const TravelPackage = () => {
                   <h2 className="text-base font-bold text-gray-800 mb-1 line-clamp-1">
                     {item.name}
                   </h2>
-                  {item.seoTitle && (
-                    <p className="bg-indigo-100 text-indigo-600 text-xs px-2 py-0.5 rounded w-fit mb-1 line-clamp-1">
-                      {item.seoTitle}
-                    </p>
-                  )}
+                
                   <p className="text-sm text-gray-600 line-clamp-2">
-                    Explore the best {item.category?.toLowerCase() || "travel"} packages now.
+                     {item.category?.toLowerCase() || "travel"} packages now.
                   </p>
                 </div>
                 <div className="flex justify-between items-center mt-3">
                   <button className="bg-yellow-500 text-white px-3 py-1 text-xs rounded hover:bg-yellow-600 transition">
-                    View
+                    Book Now
                   </button>
-                  <span className="text-xs border border-gray-300 px-2 py-0.5 rounded">
-                    {item.category}
-                  </span>
+                 
                 </div>
               </div>
             </Link>
