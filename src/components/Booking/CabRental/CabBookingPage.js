@@ -31,7 +31,7 @@ const CabBookingPage = () => {
     const fetchCabDetails = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:8000/api/cab/get/${cabId}`);
+        const res = await fetch(`https://cabzii.in/api/cab/get/${cabId}`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed to fetch cab details");
 

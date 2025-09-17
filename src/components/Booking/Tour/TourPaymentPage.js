@@ -80,7 +80,7 @@ const TourPaymentPage = () => {
         paymentMethod: "pay_on_ride",
       };
 
-      const res = await axios.post("http://localhost:8000/api/tourbookings/book", payload, {
+      const res = await axios.post("https://cabzii.in/api//tourbookings/book", payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

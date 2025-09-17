@@ -21,7 +21,7 @@ const CabRental = () => {
   useEffect(() => {
     const loadCabs = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/cab/getall");
+        const res = await fetch("https://cabzii.in/api/cab/getall");
         if (!res.ok) throw new Error("Fetch failed");
         const data = await res.json();
         const cabList = data.cabs || [];

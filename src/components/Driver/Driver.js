@@ -21,7 +21,7 @@ const Driver = () => {
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/driver/getAll");
+        const res = await fetch("https://cabzii.in/api/driver/getAll");
         if (!res.ok) throw new Error("Fetch failed");
         const data = await res.json();
         const categoryList = Array.isArray(data.data) ? data.data : [];

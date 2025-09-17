@@ -91,7 +91,7 @@ const Profile = () => {
       setUpdateLoading(true);
 
       const response = await fetch(
-        "http://localhost:8000/api/client/update-profile",
+        "https://cabzii.in/api/client/update-profile",
         {
           method: "PUT",
           headers: {

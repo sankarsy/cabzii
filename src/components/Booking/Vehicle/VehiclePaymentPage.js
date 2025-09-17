@@ -71,7 +71,7 @@ const VehiclePaymentPage = () => {
       };
 
       const res = await axios.post(
-        "http://localhost:8000/api/vehicle-bookings/create",
+        "http://cabzii.in/api/vehicle-bookings/create",
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );

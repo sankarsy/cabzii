@@ -36,7 +36,7 @@ const TourBookingPage = () => {
     const fetchTourDetails = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8000/api/tour/getPackage/${tourId}`
+          `https://cabzii.in/api//tour/getPackage/${tourId}`
         );
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed to load tour");

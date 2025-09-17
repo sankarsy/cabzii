@@ -19,7 +19,7 @@ const Vehicles = () => {
   useEffect(() => {
     const loadVehicles = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/vehicle/getAllVehicles");
+        const res = await fetch("https://cabzii.in/api/vehicle/getAllVehicles");
         if (!res.ok) throw new Error("Fetch failed");
         const data = await res.json();
 

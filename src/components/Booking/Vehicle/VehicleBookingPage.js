@@ -33,7 +33,7 @@ const VehicleBookingPage = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `http://localhost:8000/api/vehicle/getvehicle/${vehicleId}`
+          `http://cabzii.in/api/vehicle/getvehicle/${vehicleId}`
         );
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed to load vehicle");

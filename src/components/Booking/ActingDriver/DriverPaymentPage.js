@@ -62,7 +62,7 @@ const DriverPaymentPage = () => {
       };
 
       const res = await axios.post(
-        "http://localhost:8000/api/driver-bookings/book",
+        "https://cabzii.in/api/driver-bookings/book",
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );

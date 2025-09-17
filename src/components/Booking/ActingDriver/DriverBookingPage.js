@@ -31,7 +31,7 @@ const DriverBookingPage = () => {
     const fetchCategory = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:8000/api/driver/get/${categoryId}`);
+        const res = await fetch(`https://cabzii.in/api/driver/get/${categoryId}`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed to fetch category");
 

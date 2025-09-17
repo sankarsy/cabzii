@@ -58,7 +58,7 @@ const CabPaymentPage = () => {
       };
 
       const res = await axios.post(
-        "http://localhost:8000/api/cab-rentals/book",
+        "https://cabzii.in/api/cab-rentals/book",
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );

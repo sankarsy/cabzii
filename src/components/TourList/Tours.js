@@ -15,7 +15,7 @@ const Tours = () => {
   useEffect(() => {
     const loadPackages = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/tour/getAllPackages");
+        const res = await fetch("https://cabzii.in/api/tour/getAllPackages");
         if (!res.ok) throw new Error("Fetch failed");
         const data = await res.json();
         setPackages(data || []);

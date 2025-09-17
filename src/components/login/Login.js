@@ -84,7 +84,7 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:8000/api/client/send-otp", { mobile });
+      const res = await axios.post("https://cabzii.in/api/client/send-otp", { mobile });
       if (res.data.status === 1) {
         toast.success(res.data.message);
         setShowOtpModal(true);
@@ -104,7 +104,7 @@ const Login = () => {
       return;
     }
     try {
-      const res = await axios.post("http://localhost:8000/api/client/verify-otp", { mobile, otp });
+      const res = await axios.post("https://cabzii.in/api/client/verify-otp", { mobile, otp });
       if (res.data.status === 1) {
         if (res.data.token) dispatch(login(res.data.token));
         toast.success("Login successful");
