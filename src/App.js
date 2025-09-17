@@ -49,7 +49,7 @@ function App() {
   return (
     <div className="overflow-x-hidden bg-gray-200">
       <Navbar />
-      <div className="pt-12 md:pt-14">
+      <div className="pt-12 md:pt-14"> 
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />

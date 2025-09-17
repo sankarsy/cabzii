@@ -33,8 +33,8 @@ function Navbar() {
   };
 
   const navLinks = [
-    { id: 1, name: "Cabs", link: "/carlist", icon: <BiCar /> },
-    { id: 2, name: "Tour Package", link: "/tour-packages", icon: <BiMapAlt /> },
+    { id: 1, name: "Cabs", link: "/all-vehicles", icon: <BiCar /> },
+    { id: 2, name: "Tour Package", link: "/all-tour-packages", icon: <BiMapAlt /> },
     { id: 3, name: "Call Driver", link: "/all-drivers", icon: <BiUserVoice /> },
   ];
 
