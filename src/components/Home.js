@@ -8,6 +8,10 @@ import { FaWhatsapp } from "react-icons/fa"; // Import WhatsApp icon
 import Carousel from "./Carousel/Carousel";
 import TravelPackage from "./TravelPackage/TravelPackage";
 import Driver from "./Driver/Driver";
+import Vehicles from "./Vehicles/Vehicles";
+import TourList from "./TourList/TourList";
+import Tours from "./TourList/Tours";
+import CabRental from "./cabrental/CabRental";
 
 
 function Home() {
@@ -19,8 +23,13 @@ function Home() {
   return (
     <div className="bg-gray-100 dark:bg-black dark:text-white overflow-x-hidden">
       <Carousel />
-      <TravelPackage />
-      <CarList />
+        {/* <TravelPackage />
+        <CarList /> */}
+      
+      <CabRental />
+      <TourList />
+      <Tours />
+      <Vehicles />
       <Driver />
       <Services />
       <Testimonial />

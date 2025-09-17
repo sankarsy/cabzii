@@ -11,21 +11,27 @@ const slides = [
   { id: 3, image: image3 },
 ];
 
+// Transparent glowing right arrow
 const NextArrow = ({ onClick }) => (
   <div
     onClick={onClick}
-    className="absolute right-2 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-40 text-white text-3xl rounded-full p-1 hover:bg-opacity-70 transition cursor-pointer"
+    className="absolute right-2 top-1/2 transform -translate-y-1/2 z-20 p-1 rounded-full cursor-pointer transition-all
+               bg-transparent border border-white/30 hover:border-white/60
+               shadow-[0_0_10px_4px_rgba(255,255,255,0.3)] hover:shadow-[0_0_15px_6px_rgba(255,255,255,0.5)]"
   >
-    <BiChevronRight />
+    <BiChevronRight className="text-block text-3xl" />
   </div>
 );
 
+// Transparent glowing left arrow
 const PrevArrow = ({ onClick }) => (
   <div
     onClick={onClick}
-    className="absolute left-2 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-40 text-white text-3xl rounded-full p-1 hover:bg-opacity-70 transition cursor-pointer"
+    className="absolute left-2 top-1/2 transform -translate-y-1/2 z-20 p-1 rounded-full cursor-pointer transition-all
+               bg-transparent border border-white/30 hover:border-white/60
+               shadow-[0_0_10px_4px_rgba(255,255,255,0.3)] hover:shadow-[0_0_15px_6px_rgba(255,255,255,0.5)]"
   >
-    <BiChevronLeft />
+    <BiChevronLeft className="text-block text-3xl" />
   </div>
 );
 
@@ -33,12 +39,11 @@ const Carousel = () => {
   const settings = {
     infinite: true,
     autoplay: true,
-    autoplaySpeed:4000,
+    autoplaySpeed: 4000,
     speed: 700,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
-    // dots: true,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     appendDots: dots => (
@@ -47,7 +52,7 @@ const Carousel = () => {
       </div>
     ),
     customPaging: () => (
-      <div className="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+      <div className="w-2.5 h-2.5 rounded-full bg-blue-300 border border-sky-400 hover:bg-blue-400 transition"></div>
     ),
   };
 

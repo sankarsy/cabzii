@@ -1,13 +1,11 @@
-// DriverAll.jsx
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
-import { Helmet } from "react-helmet-async"; // ✅ SEO
 
-const DriverAll = () => {
-  const [categories, setCategories] = useState([]);
-  const [filteredCategories, setFilteredCategories] = useState([]);
-  const [selectedPackageByCategory, setSelectedPackageByCategory] = useState({});
+const AllVehicles = () => {
+  const [vehicles, setVehicles] = useState([]);
+  const [filteredVehicles, setFilteredVehicles] = useState([]);
+  const [selectedPackageByVehicle, setSelectedPackageByVehicle] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterType, setFilterType] = useState("All");
@@ -17,28 +15,26 @@ const DriverAll = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadCategories = async () => {
+    const loadVehicles = async () => {
       try {
-        const res = await fetch("https://cabzii.in/api/driver/getAll");
+        const res = await fetch("https://cabzii.in/api/vehicle/getAllVehicles");
         if (!res.ok) throw new Error("Fetch failed");
         const data = await res.json();
-
-        const cats = data?.data || [];
-        setCategories(cats);
-        setFilteredCategories(cats);
+        setVehicles(data);
+        setFilteredVehicles(data);
 
         const init = {};
-        cats.forEach((c) => {
-          if (c?.packages?.length > 0) init[c._id] = c.packages[0]._id;
+        data.forEach((v) => {
+          if (v.packages?.length > 0) init[v._id] = v.packages[0]._id;
         });
-        setSelectedPackageByCategory(init);
+        setSelectedPackageByVehicle(init);
       } catch (err) {
-        setError("Failed to load categories");
+        setError("Failed to load vehicle data");
       } finally {
         setLoading(false);
       }
     };
-    loadCategories();
+    loadVehicles();
   }, []);
 
   useEffect(() => {
@@ -55,85 +51,42 @@ const DriverAll = () => {
 
     return () => {
       document.removeEventListener("mousedown", handleOutside);
-      document.removeEventListener("touchstart", handleOutside, { passive: true });
+      document.removeEventListener("touchstart", handleOutside);
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, [openDropdown]);
 
-  const onPackageChange = (categoryId, pkgId) => {
-    setSelectedPackageByCategory((prev) => ({ ...prev, [categoryId]: pkgId }));
+  const onPackageChange = (vehicleId, pkgId) => {
+    setSelectedPackageByVehicle((prev) => ({ ...prev, [vehicleId]: pkgId }));
     setOpenDropdown(null);
   };
 
-  const handleBookNow = (category, pkg) => {
+  const handleBookNow = (vehicle, pkg) => {
     if (!pkg?._id) return;
-    navigate(`/booking?categoryId=${category._id}&packageId=${pkg._id}`);
+    navigate(`/booking?vehicleId=${vehicle._id}&packageId=${pkg._id}`);
   };
 
   const handleFilterChange = (type) => {
     setFilterType(type);
     if (type === "All") {
-      setFilteredCategories(categories);
+      setFilteredVehicles(vehicles);
     } else {
-      setFilteredCategories(
-        categories.filter(
-          (c) => c?.categoryName?.toLowerCase() === type.toLowerCase()
-        )
+      setFilteredVehicles(
+        vehicles.filter((v) => v.type?.toLowerCase() === type.toLowerCase())
       );
     }
   };
 
-  const filterOptions = useMemo(
-    () => ["All", ...new Set((categories || []).map((c) => c?.categoryName).filter(Boolean))],
-    [categories]
-  );
-
-  const totalCount = filteredCategories?.length || 0;
-  const siteName = "Call Driver";
-  const seoTitle =
-    filterType === "All"
-      ? `Driver Categories | ${siteName}`
-      : `${filterType} Drivers – Packages & Prices | ${siteName}`;
-  const seoDescription =
-    filterType === "All"
-      ? `Browse ${totalCount} driver categories with hourly packages, deals, and instant booking. Compare prices and book a driver in minutes.`
-      : `Explore ${filterType} driver packages with transparent pricing and quick booking. Compare durations, offers, and choose the best option for you.`;
-
-  const itemListJsonLd = useMemo(() => {
-    const items = (filteredCategories || []).map((c, idx) => ({
-      "@type": "ListItem",
-      position: idx + 1,
-      name: c?.categoryName || `Category ${idx + 1}`,
-    }));
-    return {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      name: "Driver Categories",
-      itemListElement: items,
-    };
-  }, [filteredCategories]);
-
-  if (loading) return <div className="p-4 text-center">Loading categories...</div>;
+  if (loading) return <div className="p-4 text-center">Loading vehicles...</div>;
   if (error) return <div className="p-4 text-center text-red-600">{error}</div>;
+
+  const filterOptions = ["All", "SUV", "Sedan", "Hatchback", "Luxury"];
 
   return (
     <div className="w-full mt-4 mx-auto py-8 px-4 bg-white">
-      <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={seoDescription} />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content={seoTitle} />
-        <meta name="twitter:description" content={seoDescription} />
-        <script type="application/ld+json">
-          {JSON.stringify(itemListJsonLd)}
-        </script>
-      </Helmet>
-
+      {/* Header */}
       <div className="flex justify-between items-center px-2 mb-4">
-        <h2 className="text-xl font-bold text-gray-800">Driver Categories</h2>
+        <h2 className="text-xl font-bold text-gray-800">All Vehicles</h2>
         <button
           onClick={() => navigate(-1)}
           className="text-blue-600 hover:underline font-medium text-sm"
@@ -142,6 +95,7 @@ const DriverAll = () => {
         </button>
       </div>
 
+      {/* Filter */}
       <div className="mb-6">
         <div className="sm:hidden relative w-1/2">
           <button
@@ -198,58 +152,59 @@ const DriverAll = () => {
         </div>
       </div>
 
+      {/* Vehicle Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {filteredCategories.map((c) => {
+        {filteredVehicles.map((v) => {
           const selectedPkgId =
-            selectedPackageByCategory[c._id] || c?.packages?.[0]?._id;
+            selectedPackageByVehicle[v._id] || v.packages?.[0]?._id;
           const pkg =
-            c?.packages?.find((p) => p._id === selectedPkgId) ||
-            c?.packages?.[0] ||
+            v.packages?.find((p) => p._id === selectedPkgId) ||
+            v.packages?.[0] ||
             {};
           const img =
-            c?.categoryImage?.[0] ||
-            "https://via.placeholder.com/400x250?text=Category";
-
+            v.images?.[0] || "https://via.placeholder.com/400x250?text=Vehicle";
           const saveAmount =
-            pkg?.price && pkg?.offerPrice && pkg?.offerPrice < pkg?.price
-              ? Number(pkg.price) - Number(pkg.offerPrice)
+            pkg.price && pkg.offerPrice && pkg.offerPrice < pkg.price
+              ? pkg.price - pkg.offerPrice
               : 0;
 
           return (
             <div
-              key={c._id}
+              key={v._id}
               className="bg-white rounded-xl border hover:shadow-lg transition-all duration-200"
             >
+              {/* Image */}
               <div className="relative h-40 w-full overflow-hidden rounded-t-xl">
                 <img
                   src={img}
-                  alt={c?.categoryName || "Driver Category"}
-                  loading="lazy"
+                  alt={v.name}
                   className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
                 />
-                {Number(pkg?.discount) > 0 && (
+                {pkg.discount > 0 && (
                   <span className="absolute top-2 left-2 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow">
                     {pkg.discount}% OFF
                   </span>
                 )}
               </div>
 
+              {/* Details */}
               <div className="p-3 space-y-1.5">
-                <h2 className="text-sm font-semibold text-gray-900 truncate">
-                  {c?.categoryName}
-                </h2>
+                <div className="flex justify-between items-center">
+                  <h2 className="text-sm font-semibold text-gray-900 truncate">
+                    {v.name}
+                  </h2>
 
-                <div
-                  className="relative mt-1"
-                  ref={(el) => (dropdownRefs.current[c._id] = el)}
-                >
+                </div>
+
+                {/* Package selector */}
+                <div className="sm:hidden relative mt-1">
                   <button
                     onClick={() =>
-                      setOpenDropdown(openDropdown === c._id ? null : c._id)
+                      setOpenDropdown(openDropdown === v._id ? null : v._id)
                     }
-                    disabled={!c?.packages?.length}
+                    disabled={!v.packages?.length}
                     className={`w-full border border-blue-300 font-medium rounded-full px-3 py-1.5 text-xs flex items-center justify-between transition-all ${
-                      c?.packages?.length
+                      v.packages?.length
                         ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
                         : "bg-gray-100 text-gray-400 cursor-not-allowed"
                     }`}
@@ -258,17 +213,16 @@ const DriverAll = () => {
                     <ChevronDown
                       size={14}
                       className={`transition-transform ${
-                        openDropdown === c._id ? "rotate-180" : ""
+                        openDropdown === v._id ? "rotate-180" : ""
                       }`}
                     />
                   </button>
-
-                  {openDropdown === c._id && c?.packages?.length > 0 && (
+                  {openDropdown === v._id && v.packages?.length > 0 && (
                     <div className="absolute mt-2 w-full bg-white border border-blue-200 rounded-xl shadow-lg overflow-hidden z-50">
-                      {c.packages.map((p) => (
+                      {v.packages.map((p) => (
                         <button
                           key={p._id}
-                          onClick={() => onPackageChange(c._id, p._id)}
+                          onClick={() => onPackageChange(v._id, p._id)}
                           className={`w-full text-left px-4 py-2 text-xs font-medium transition ${
                             selectedPkgId === p._id
                               ? "bg-blue-500 text-white"
@@ -282,8 +236,59 @@ const DriverAll = () => {
                   )}
                 </div>
 
+                <div className="hidden sm:flex items-center gap-2 mt-1">
+                  <div
+                    className="relative"
+                    ref={(el) => (dropdownRefs.current[v._id] = el)}
+                  >
+                    <button
+                      onClick={() =>
+                        setOpenDropdown(openDropdown === v._id ? null : v._id)
+                      }
+                      disabled={!v.packages?.length}
+                      className={`border border-blue-300 font-medium rounded-full px-4 py-1.5 text-xs flex items-center gap-1 transition-all ${
+                        v.packages?.length
+                          ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                          : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      }`}
+                    >
+                      {pkg?.duration ? `${pkg.duration} hrs` : "No packages"}
+                      <ChevronDown
+                        size={14}
+                        className={`transition-transform ${
+                          openDropdown === v._id ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                    {openDropdown === v._id && v.packages?.length > 0 && (
+                      <div className="absolute left-0 mt-1 min-w-[6rem] bg-white border border-blue-300 rounded-xl shadow-lg z-50">
+                        {v.packages.map((p) => (
+                          <div
+                            key={p._id}
+                            onClick={() => onPackageChange(v._id, p._id)}
+                            className={`px-3 py-2 text-xs cursor-pointer rounded-lg transition-colors ${
+                              selectedPkgId === p._id
+                                ? "bg-blue-100 text-blue-600 font-semibold"
+                                : "text-gray-800 hover:bg-blue-50 hover:text-blue-600"
+                            }`}
+                          >
+                            {p.duration} hrs
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {pkg.distance && (
+                    <span className="bg-gray-100 rounded-full px-2 py-0.5 text-[11px]">
+                      {pkg.distance} km
+                    </span>
+                  )}
+                </div>
+
+                {/* Price Row */}
                 <div className="flex items-center gap-2 mt-1">
-                  {pkg?.offerPrice && pkg?.price && Number(pkg.offerPrice) < Number(pkg.price) ? (
+                  {pkg.offerPrice && pkg.offerPrice < pkg.price ? (
                     <>
                       <span className="text-blue-600 font-bold text-sm">
                         ₹{pkg.offerPrice}
@@ -299,14 +304,15 @@ const DriverAll = () => {
                     </>
                   ) : (
                     <span className="text-gray-800 font-semibold text-sm">
-                      ₹{pkg?.price ?? "—"}
+                      ₹{pkg.price ?? "—"}
                     </span>
                   )}
                 </div>
 
+                {/* Book Now */}
                 <button
-                  onClick={() => handleBookNow(c, pkg)}
-                  className="w-full mt-3 bg-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-medium hover:bg-blue-700 shadow-sm transition-all duration-200 disabled:opacity-60"
+                  onClick={() => handleBookNow(v, pkg)}
+                  className="w-full mt-3 bg-blue-500 text-white px-4 py-1.5 rounded-full text-xs font-medium hover:scale-105 shadow-sm transition-all duration-200"
                   disabled={!pkg?._id}
                 >
                   Book Now
@@ -320,4 +326,4 @@ const DriverAll = () => {
   );
 };
 
-export default DriverAll;
+export default AllVehicles;
